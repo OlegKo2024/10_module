@@ -3,6 +3,7 @@ print('За честь и отвагу!')
 from threading import Thread
 from time import sleep
 
+
 class Knight(Thread):
 
     def __init__(self, name: str, power: int):
@@ -22,7 +23,6 @@ class Knight(Thread):
         print(f'{self.name} одержал победу спустя {days_fought} дней(дня)')
 
 
-
 first_knight = Knight('Sir Lancelot', 10)
 second_knight = Knight("Sir Galahad", 20)
 # Запуск потоков и остановка текущего
@@ -32,4 +32,3 @@ second_knight.start()
 first_knight.join()
 second_knight.join()
 print(f'Все битвы закончились!')
-
