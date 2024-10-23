@@ -57,3 +57,45 @@ th2.join()
 
 print(f'Итоговый баланс: {bk.balance}')
 
+print('Вариант 2: with lock')
+
+import threading
+from random import randint
+from time import sleep
+
+class Bank:
+    def __init__(self):
+        self.balance = 0
+        self.lock = threading.Lock()
+
+    def deposit(self):
+        for i in range(100):
+            random_deposit = randint(50, 500)
+            with self.lock:                             # Защита доступа к балансу
+                self.balance += random_deposit          # if self.balance >= 500: # and self.lock.locked(): - not used
+                print(f'Пополнение: {random_deposit}. Баланс: {self.balance}')
+            sleep(0.001)
+
+    def take(self):
+        for i in range(100):
+            random_withdrawal = randint(50, 500)
+            print(f'Запрос на {random_withdrawal}')
+            if random_withdrawal <= self.balance:
+                with self.lock:                             # Блокируем доступ к балансу
+                    self.balance -= random_withdrawal
+                    print(f'Снятие: {random_withdrawal}. Баланс: {self.balance}')
+            else:
+                print('Запрос отклонён, недостаточно средств')
+            sleep(0.001)
+
+bk = Bank()
+
+th1 = threading.Thread(target=bk.deposit)
+th2 = threading.Thread(target=bk.take)
+
+th1.start()
+th2.start()
+th1.join()
+th2.join()
+
+print(f'Итоговый баланс: {bk.balance}')
