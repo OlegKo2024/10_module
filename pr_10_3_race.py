@@ -99,3 +99,57 @@ th1.join()
 th2.join()
 
 print(f'Итоговый баланс: {bk.balance}')
+
+print('Вариант 3: try - finally')
+
+import threading
+from random import randint
+from time import sleep
+
+class Bank:
+
+    def __init__(self):
+        self.balance = 0
+        self.lock = threading.Lock()
+
+
+    def deposit(self):
+        for i in range(100):
+            random_deposit = randint(50, 500)
+            try:
+                self.lock.acquire()
+                self.balance += random_deposit
+                print(f'Пополнение: {random_deposit}. Баланс: {self.balance}')
+                # if self.balance >= 500 and self.lock.locked():
+            finally:
+                self.lock.release()
+            sleep(0.001)
+
+    def take(self):
+        for i in range(100):
+            random_withdrawal = randint(50, 500)
+            print(f'Запрос на {random_withdrawal}')
+            if random_withdrawal <= self.balance:
+                try:
+                    self.lock.acquire()
+                    self.balance -= random_withdrawal
+                    print(f'Снятие: {random_withdrawal}. Баланс: {self.balance}')
+                finally:
+                    self.lock.release()
+            else:
+                print(f'Запрос отклонён, недостаточно средств')
+            sleep(0.001)
+
+
+bk = Bank()
+
+# Т.к. методы принимают self, в потоки нужно передать сам объект класса Bank
+th1 = threading.Thread(target=Bank.deposit, args=(bk,))
+th2 = threading.Thread(target=Bank.take, args=(bk,))
+
+th1.start()
+th2.start()
+th1.join()
+th2.join()
+
+print(f'Итоговый баланс: {bk.balance}')
