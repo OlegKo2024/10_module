@@ -17,7 +17,7 @@ filenames = [f'./Files/file {number}.txt' for number in range(1, 5)]
 if __name__ == '__main__':
     # Линейный вызов
     start_time = datetime.now()
-    read_info(filenames)
+    # read_info(filenames)
     end_time = datetime.now()
     elapse_time = end_time - start_time
     print(elapse_time)
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # Многопроцессный
     start_time = datetime.now()
     with multiprocessing.Pool(processes=4) as pool:
-        results = pool.map(read_info, filenames)
+        pool.map(read_info, (filenames,))
     end_time = datetime.now()
     elapse_time = end_time - start_time
     print(elapse_time)
