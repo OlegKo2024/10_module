@@ -15,7 +15,7 @@ class Knight(Thread):
         foes_number = 100
         days_fought = 0
         print(f'{self.name} на нас напали!')
-        while foes_number > 0:
+        while foes_number:
             foes_number -= self.power
             sleep(1)
             days_fought += 1

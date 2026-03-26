@@ -25,6 +25,15 @@ def read_info(name):
     return all_data
 
 
+# Вариант, предложенный chatGPT, c с циклом for и lambda
+def read_info__(name):
+    all_data = []
+    with open(name, encoding='utf-8') as file:
+        for line in iter(lambda: file.readline(), ''):  # Создаём итератор, который будет читать строки до конца файла
+            all_data.append(line.strip())  # Очищаем и добавляем в список
+    return all_data
+
+
 def main_line():
     start_time = datetime.now()
     for file in filenames:
